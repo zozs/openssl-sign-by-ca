@@ -3,11 +3,13 @@
 ## Launching a server
 
 First we need to generate a simple, self-signed, server certificate.
+
 ```
 $ openssl req -x509 -sha256 -newkey rsa:4096 -keyout server.key -out server.pem -days 365 -nodes
 ```
 
 Then launch the server.
+
 ```
 $ openssl s_server -accept 12345 -cert server.pem -key server.key -CAfile ca.pem -Verify 1
 ```
