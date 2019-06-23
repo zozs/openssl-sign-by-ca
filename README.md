@@ -17,15 +17,16 @@ the actions by a CA. In short, it does the following:
 
 ## How-to
 
-1. Run `make` which will generate a new CA, and compile the application.
-2. Run `./cert ca.key ca.pem` which will generate a certificate signed by the CA.
-3. (Optional). Run `make clean` to remove compiled applications.
-4. (Optional). Run `make caclean` to remove the generated CA certificate and key.
+1. Depending on your OpenSSL version, `cd` into either `openssl1.0` or `openssl1.1`
+2. Run `make` which will generate a new CA, and compile the application.
+3. Run `./cert ca.key ca.pem` which will generate a certificate signed by the CA.
+4. (Optional). Run `make clean` to remove compiled applications.
+5. (Optional). Run `make caclean` to remove the generated CA certificate and key.
 
 ## License
 
 ```
-Copyright (c) 2017, Linus Karlsson
+Copyright (c) 2017, 2018, 2019 Linus Karlsson
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
