@@ -110,7 +110,7 @@ int generate_signed_key_pair(EVP_PKEY *ca_key, X509 *ca_crt, EVP_PKEY **key, X50
 
 	/* Set validity of certificate to 2 years. */
 	X509_gmtime_adj(X509_get_notBefore(*crt), 0);
-	X509_gmtime_adj(X509_get_notAfter(*crt), (long)2*365*3600);
+	X509_gmtime_adj(X509_get_notAfter(*crt), (long)2*365*24*3600);
 
 	/* Get the request's subject and just use it (we don't bother checking it since we generated
 	 * it ourself). Also take the request's public key. */
