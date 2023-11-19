@@ -15,6 +15,7 @@
 #define REQ_DN_O "Example Company"
 #define REQ_DN_OU ""
 #define REQ_DN_CN "VNF Application"
+#define ALT_NAM "DNS:test.com,DNS:www.test.com"
 
 static void crt_to_pem(X509 *crt, uint8_t **crt_bytes, size_t *crt_size);
 static int generate_key_csr(EVP_PKEY **key, X509_REQ **req);
@@ -87,6 +88,20 @@ void crt_to_pem(X509 *crt, uint8_t **crt_bytes, size_t *crt_size)
 	BIO_free_all(bio);
 }
 
+int add_ext(X509 *cert, int nid, char *value) {
+    X509_EXTENSION *ext;
+    X509V3_CTX ctx;
+    X509V3_set_ctx_nodb(&ctx);
+    X509V3_set_ctx(&ctx, cert, cert, NULL, NULL, 0);
+    ext = X509V3_EXT_conf_nid(NULL, &ctx, nid, value);
+    if (!ext) {
+        return 0;
+    }
+    X509_add_ext(cert, ext, -1);
+    X509_EXTENSION_free(ext);
+    return 1;
+}
+
 int generate_signed_key_pair(EVP_PKEY *ca_key, X509 *ca_crt, EVP_PKEY **key, X509 **crt)
 {
 	/* Generate the private key and corresponding CSR. */
@@ -115,6 +130,9 @@ int generate_signed_key_pair(EVP_PKEY *ca_key, X509 *ca_crt, EVP_PKEY **key, X50
 	/* Get the request's subject and just use it (we don't bother checking it since we generated
 	 * it ourself). Also take the request's public key. */
 	X509_set_subject_name(*crt, X509_REQ_get_subject_name(req));
+
+	add_ext(*crt, NID_subject_alt_name, ALT_NAM);
+
 	EVP_PKEY *req_pubkey = X509_REQ_get_pubkey(req);
 	X509_set_pubkey(*crt, req_pubkey);
 	EVP_PKEY_free(req_pubkey);
